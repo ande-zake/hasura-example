@@ -1,0 +1,38 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2509
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 configurasi di server \
+103.82.241.60\
+server exabyte\
+\
+install with docker-compose\
+ikuti langkah dibawah\
+1. https://hasura.io/docs/1.0/graphql/core/getting-started/docker-simple.html\
+2. docker-compose.yaml sudaha da di folder local-macbook ~/home(iputuande)/hasura/docker-compose.yaml (dsitu graphql-engine di akses melalui localhost 9090 dan didalam docker diakses melalui 8080) \
+\
+configurasi hasura with httpd / apache\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+enable port 82 (from public)\
+1. /etc/httpd/conf/httpd.conf \
+2. menambahkan baris 44 -> Listen 82\
+3. enable firewall untuk port 82, agar bisa diakses dari luar\
+	a. check apakah port 82 ready di -> http_port_t ? jika iya lanjut ke langkah c\
+	b. jika port 82 blm ready, maka tambahkan port 82 ke "http_port_t". command dibawah :\
+		semanage port -a -t "http_port_t" -p tcp 82\
+4. open firewall\
+	a. firewall-cmd --permanent --add-port=82/tcp -> output : success\
+	b. firewall-cmd --permanent --add-port=82/udp -> output : success\
+	c. firewall-cmd --reload -> output : success\
+	d. port 82 ready to access from real world\
+\
+membuat reserve_proxy\
+1. #server-103.82.241.60 : cd /etc/httpd/conf.d/ \
+2. buat hasuragraphql.conf didalam folder conf.d\
+3. arahkan port *.82 to 9090. (public access ke port 82 dan diarahkan ke localhost:9090\
+4. restart \
+\
+}
